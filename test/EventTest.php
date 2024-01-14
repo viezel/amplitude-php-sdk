@@ -17,7 +17,7 @@ class EventTest extends TestCase
     {
         $event = new Event();
         $result = $event->set($name, $value);
-        $this->assertInstanceOf('\Zumba\Amplitude\Event', $result, 'get should return instance of itself');
+        $this->assertInstanceOf('\Viezel\Amplitude\Event', $result, 'get should return instance of itself');
         $this->assertEquals(json_encode($expected), json_encode($event), $msg);
     }
 
