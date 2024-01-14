@@ -1,4 +1,5 @@
 <?php
+
 namespace Viezel\Amplitude;
 
 /**
@@ -42,8 +43,6 @@ class Event implements \JsonSerializable
 {
     /**
      * Array of data for this event
-     *
-     * @var array
      */
     protected array $data = [];
 
@@ -52,8 +51,6 @@ class Event implements \JsonSerializable
      *
      * The name used here is what is expected by the Amplitude HTTP API, and how the data will be stored internally,
      * however these can be set/retrieved using camelcase.
-     *
-     * @var array
      */
     protected array $availableVars = [
         'user_id' => 'string',
@@ -92,26 +89,23 @@ class Event implements \JsonSerializable
     /**
      * Constructor
      *
-     * @param array $data Initial data to set on the event
+     * @param  array  $data Initial data to set on the event
      */
     public function __construct(array $data = [])
     {
-        if (!empty($data)) {
+        if (! empty($data)) {
             $this->setProperties($data);
         }
     }
 
     /**
      * Set the user properties on the event
-     *
-     * @param array $userProperties
-     *
-     * @return self
      */
     public function setUserProperties(array $userProperties): self
     {
         $props = $this->userProperties ?: [];
         $this->userProperties = array_merge($props, $userProperties);
+
         return $this;
     }
 
@@ -131,15 +125,13 @@ class Event implements \JsonSerializable
      * set in event_properties are not normalized.  Meaning if you use a camelcase name, name with spaces in it, etc,
      * it will use that name as-is without attempting to normalize.
      *
-     * @param string $name If is array, will set key:value pairs
-     * @param mixed $value
-     *
-     * @return self
+     * @param  string  $name If is array, will set key:value pairs
+     * @param  mixed  $value
      */
     public function set(string $name, $value): self
     {
         $name = $this->normalize($name);
-        if (!isset($this->availableVars[$name])) {
+        if (! isset($this->availableVars[$name])) {
             // treat it like an event_property
             $this->data['event_properties'][$name] = $value;
 
@@ -166,10 +158,7 @@ class Event implements \JsonSerializable
     }
 
     /**
-     * @param array $properties
      * @see set()
-     *
-     * @return self
      */
     public function setProperties(array $properties): self
     {
@@ -188,7 +177,6 @@ class Event implements \JsonSerializable
      *
      * If no value found, returns null.
      *
-     * @param string $name
      *
      * @return mixed|null
      */
@@ -209,10 +197,6 @@ class Event implements \JsonSerializable
      *
      * Method is case-sensitive for custom properties. Built-in event properties can use camelcase OR underscore, either
      * one will work.
-     *
-     * @param string $name
-     *
-     * @return self
      */
     public function unsetProperty(string $name): self
     {
@@ -231,10 +215,6 @@ class Event implements \JsonSerializable
      *
      * Method is case-sensitive for custom properties. Built-in event properties can use camelcase OR underscore, either
      * one will work.
-     *
-     * @param string $name
-     *
-     * @return boolean
      */
     public function isPropertySet(string $name): bool
     {
@@ -248,10 +228,7 @@ class Event implements \JsonSerializable
      *
      * @see set()
      *
-     * @param string $name
-     * @param mixed $value
-     *
-     * @return void
+     * @param  mixed  $value
      */
     public function __set(string $name, $value): void
     {
@@ -262,8 +239,6 @@ class Event implements \JsonSerializable
      * Magic method to get the value
      *
      * @see get()
-     *
-     * @param string $name
      *
      * @return mixed
      */
@@ -276,8 +251,6 @@ class Event implements \JsonSerializable
      * Unset event property
      *
      * See the unsetProperty() method
-     *
-     * @param string $name
      */
     public function __unset(string $name)
     {
@@ -290,8 +263,7 @@ class Event implements \JsonSerializable
      * Uses same normalization on the name as the set method, where it will match built-in properties for either
      * camelcase or snake_case version of property
      *
-     * @param string $name
-     * @return boolean
+     * @return bool
      */
     public function __isset(string $name)
     {
@@ -303,10 +275,6 @@ class Event implements \JsonSerializable
      *
      * If it matches a built-in property name, will return the normalized property name. Returns the name
      * un-modified otherwise.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function normalize(string $name): string
     {
@@ -326,14 +294,13 @@ class Event implements \JsonSerializable
                 return $camel;
             }
         }
+
         // Could not find name, just use original un-altered, probably used in event_properties
         return $name;
     }
 
     /**
      * Convert the event to array format
-     *
-     * @return array
      */
     public function toArray(): array
     {
@@ -342,8 +309,6 @@ class Event implements \JsonSerializable
 
     /**
      * JSON serialize
-     *
-     * @return array
      */
     public function jsonSerialize(): array
     {

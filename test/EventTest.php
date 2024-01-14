@@ -3,7 +3,7 @@
 namespace Viezel\Amplitude\Test;
 
 use PHPUnit\Framework\TestCase;
-use \Viezel\Amplitude\Event;
+use Viezel\Amplitude\Event;
 
 /**
  * @group amplitude
@@ -183,7 +183,7 @@ class EventTest extends TestCase
                 'event_properties' => ['custom prop' => 'value'],
                 'user_id' => 'user',
                 'quantity' => 50,
-                'user_properties' => ['prop' => 'value']
+                'user_properties' => ['prop' => 'value'],
             ],
             $event->toArray(),
             'Initialization Check'

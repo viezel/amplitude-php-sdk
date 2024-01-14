@@ -44,7 +44,7 @@ class AmplitudeTest extends TestCase
             ->getMock();
 
         $amplitude->expects($this->exactly(1))
-                  ->method('postData');
+            ->method('postData');
 
         $amplitude->queueEvent('Event 1')
             ->queueEvent('Event 2', ['customProp' => 'value'])
@@ -65,7 +65,6 @@ class AmplitudeTest extends TestCase
             ->onlyMethods(['logEvent'])
             ->getMock();
 
-
         $this->assertFalse($amplitude->hasQueuedEvents(), 'Initialization check, should not have queued events');
 
         $result = $amplitude->init('APIKEY', 'USER-ID')
@@ -76,9 +75,9 @@ class AmplitudeTest extends TestCase
 
     public function testEvent()
     {
-        $event     = new Event();
+        $event = new Event();
         $amplitude = new Amplitude();
-        $newEvent  = $amplitude->event();
+        $newEvent = $amplitude->event();
         $this->assertNotSame($newEvent, $event, 'Initialization check');
         $amplitude->event($event);
         $this->assertSame($event, $amplitude->event(), 'Event passed in should persist until it is used or reset');
@@ -95,10 +94,10 @@ class AmplitudeTest extends TestCase
 
     public function testLogEvent()
     {
-        $props           = ['event property' => 'value'];
-        $userId          = 'USERID';
-        $deviceId        = 'DEVICEID';
-        $eventType       = 'Event Type';
+        $props = ['event property' => 'value'];
+        $userId = 'USERID';
+        $deviceId = 'DEVICEID';
+        $eventType = 'Event Type';
         $secondEventType = 'Second Event';
 
         $amplitude = $this->getMockBuilder(Amplitude::class)
@@ -110,7 +109,7 @@ class AmplitudeTest extends TestCase
         $event->eventType = $eventType;
         $result = $amplitude
             ->setDeviceId($deviceId)
-            ->init('API_KEY',$userId)
+            ->init('API_KEY', $userId)
             ->logEvent($eventType, $props);
 
         $eventData = $event->toArray();
@@ -156,17 +155,17 @@ class AmplitudeTest extends TestCase
 
     public function testLogEventUserPropertiesMerged()
     {
-        $props     = ['event property' => 'value'];
-        $props2    = ['second prop' => 'second val'];
-        $userId    = 'USERID';
+        $props = ['event property' => 'value'];
+        $props2 = ['second prop' => 'second val'];
+        $userId = 'USERID';
         $eventType = 'Event Type';
 
         $amplitude = $this->getMockBuilder(Amplitude::class)
             ->onlyMethods(['postData'])
             ->getMock();
-        $event                 = $amplitude->event();
+        $event = $amplitude->event();
         $event->userProperties = $props;
-        $result                = $amplitude->init('APIKEY', $userId)
+        $result = $amplitude->init('APIKEY', $userId)
             ->setUserProperties($props2)
             ->logEvent($eventType);
 
@@ -215,9 +214,9 @@ class AmplitudeTest extends TestCase
         $amplitude->expects($this->once())
             ->method('postData');
 
-        $event            = $amplitude->event();
+        $event = $amplitude->event();
         $event->eventType = 'Event Type';
-        $event->userId    = 'USER';
+        $event->userId = 'USER';
 
         $amplitude->init('APIKEY');
         $amplitude->logEvent();
@@ -304,8 +303,8 @@ class AmplitudeTest extends TestCase
         $deviceId = 'DEVICE_ID';
 
         $amplitude = $this->getMockBuilder(Amplitude::class)
-                          ->onlyMethods(['postData'])
-                          ->getMock();
+            ->onlyMethods(['postData'])
+            ->getMock();
         $amplitude->setDeviceId($deviceId);
 
         $this->assertEquals($deviceId, $amplitude->getDeviceId());
@@ -353,19 +352,19 @@ class AmplitudeTest extends TestCase
 
     public function testSetUserProperties()
     {
-        $userProps = ['dob'    => 'tomorrow',
-                      'gender' => 'f',
+        $userProps = ['dob' => 'tomorrow',
+            'gender' => 'f',
         ];
         $amplitude = new Amplitude();
         $amplitude->setUserProperties($userProps);
         $this->assertSame($userProps, $amplitude->getUserProperties());
-        $userProps2 = ['dob'  => 'yesterday',
-                       'name' => 'Baby',
+        $userProps2 = ['dob' => 'yesterday',
+            'name' => 'Baby',
         ];
-        $expected   = [
-            'dob'    => 'yesterday',
+        $expected = [
+            'dob' => 'yesterday',
             'gender' => 'f',
-            'name'   => 'Baby',
+            'name' => 'Baby',
         ];
         $amplitude->setUserProperties($userProps2);
         $this->assertSame(
