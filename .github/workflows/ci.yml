@@ -1,0 +1,39 @@
+name: Amplitude SDK CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  testsuite:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['7.4', '8.1', '8.2', '8.3']
+    name: PHP ${{ matrix.php-version }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Validate and install dependencies
+      uses: php-actions/composer@v6
+      with:
+          php_version: ${{ matrix.php-version }}
+    - name: Run test suite
+      uses: php-actions/phpunit@v3
+      with:
+          version: 9.6.5
+          php_extensions: xdebug
+          php_version: ${{ matrix.php-version }}
+          bootstrap: vendor/autoload.php
+          configuration: phpunit.xml
+          args: --coverage-clover build/logs/clover.xml
+      env:
+          XDEBUG_MODE: coverage
+          TEST_NAME: Scarlett
+    - name: Run code sniffing
+      uses: php-actions/phpcs@v1
+      with:
+          php_version: ${{ matrix.php-version }}
+          path: src
+          standard: psr2

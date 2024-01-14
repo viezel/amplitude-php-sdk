@@ -1,0 +1,23 @@
+{
+    "name": "viezel/amplitude-php-sdk",
+    "description": "PHP SDK for Amplitude",
+    "keywords": ["amplitude", "sdk", "analytics", "tracking"],
+    "license": "MIT",
+    "require": {
+        "ext-curl": "*",
+        "ext-json": "*",
+        "php": ">=7.4",
+        "psr/log": "^1.0 | ^2.0 | ^3.0"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.4.*",
+        "php-coveralls/php-coveralls": "^2.4",
+        "phpunit/phpunit": "^9.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Viezel\\Amplitude\\": "./src/",
+            "Viezel\\Amplitude\\Test\\": "./test/"
+        }
+    }
+}
